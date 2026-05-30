@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # ── Database Layer ──────────────────────────────────────
+  mongodb:
+    image: mongo:latest
+    container_name: sentinel_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - sentinel_net
+    restart: always
+
+  # ── Backend Processing Service ──────────────────────────
+  api-service:
+    build: .
+    container_name: sentinel_api
+    command: python api/flask_app.py
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/
+      - MONGO_DB=fraud_detection
+      - MONGO_COLLECTION=predictions
+    depends_on:
+      - mongodb
+    networks:
+      - sentinel_net
+    restart: always
+
+  # ── Frontend Dashboard Service ──────────────────────────
+  dashboard:
+    build: .
+    container_name: sentinel_dashboard
+    command: streamlit run api/dashboard.py --server.address=0.0.0.0 --server.port=8501
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api-service:5000
+      - MONGO_URI=mongodb://mongodb:27017/
+      - MONGO_DB=fraud_detection
+      - MONGO_COLLECTION=predictions
+    depends_on:
+      - api-service
+    networks:
+      - sentinel_net
+    restart: always
+
+volumes:
+  mongo_data:
+
+networks:
+  sentinel_net:
+    driver: bridge
