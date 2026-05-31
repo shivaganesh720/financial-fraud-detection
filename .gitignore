@@ -43,3 +43,6 @@ Thumbs.db
 
 # Environment variables
 .env
+
+#Guide for the project
+project_guide.md
