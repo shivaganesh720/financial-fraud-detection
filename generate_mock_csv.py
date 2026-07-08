@@ -52,7 +52,7 @@ def generate_data():
     
     out_path = "creditcard.csv"
     df.to_csv(out_path, index=False)
-    print(f"✅ Generated mock dataset with {len(df)} rows (Genuine: {n_genuine}, Fraud: {n_fraud}) at:\n  {os.path.abspath(out_path)}\n")
+    print(f"[OK] Generated mock dataset with {len(df)} rows (Genuine: {n_genuine}, Fraud: {n_fraud}) at:\n  {os.path.abspath(out_path)}\n")
 
 if __name__ == "__main__":
     generate_data()

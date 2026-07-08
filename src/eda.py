@@ -227,7 +227,7 @@ def plot_pca_boxplots(df: pd.DataFrame, top_n: int = 10) -> str:
         data_fraud   = df[df["Class"] == 1][feat]
         bp = ax.boxplot(
             [data_genuine, data_fraud],
-            labels=["Genuine", "Fraud"],
+            tick_labels=["Genuine", "Fraud"],
             patch_artist=True,
             medianprops=dict(color="white", linewidth=1.5),
             flierprops=dict(marker=".", markerfacecolor=ACCENT_COLOR_2,
